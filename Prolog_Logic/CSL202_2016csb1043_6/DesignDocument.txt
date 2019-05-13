@@ -1,0 +1,101 @@
+---------------------------------------------------------------
+
+Author : Siddharth Nahar
+Entry No : 2016csb1043
+Use : Learning YAML parser,Generators in python and Prolog Rules.
+Date : 24/4/18
+
+-----------------------------------------------------------------
+
+Design :
+
+1. Loading data by YAML parser and Use Generator to avoid Overwriting of Entities.
+
+        #Function To genreate Facts and Append Rules in File
+        def GetFileWritten(FILE_PATH):
+
+                with open(FILE_PATH, 'r') as f:
+                        data = f.read()
+                        #data = data.replace('\n\n', '\n---\n')
+                        data = re.sub('\n[ \t\r\f]*\n','\n---\n',data)
+                        
+                #Loading Generator type by load_all        
+                Dict = yaml.load_all(data)
+
+                '''
+                Creating three Different List
+                OS,Machine,Software APP values
+
+                '''
+                OS = []
+                Machine = []
+                App = []
+
+                #Appending Data of yaml file in list
+                for x in Dict:
+                        for key,value in x.items():
+                                if(key == 'OS'):
+                                        OS.append(value)
+                                elif(key == 'Machine'):
+                                        Machine.append(value)
+                                else:
+                                        App.append(value)
+                                        
+----------------------------------------------------------------------
+
+2. Appending Lists to file.
+   For OS entity :
+        
+        for Obj in OS:
+                line = 'os( '
+                for key,value in Obj.items():
+                        if(key == 'limits'):
+                                for k,v in value.items():
+                                        line = line + str(v)+', '
+                        elif(key == 'arch'):
+                                Bits = re.findall(r'\b\d+\b',value)
+                                line = line + str(Bits[0])+', '
+                        elif(key == 'name'):
+                                line = line+"'"+value+"'"+", "        
+                        else:                
+                                line = line + str(value)+', '
+                              
+                
+                line = line[:-2]+').\n'
+                line = line.lower()
+                File_Write.write(line)
+
+----------------------------------------------------------------------------
+
+3. Prolog Functionalities :
+
+        -- find_all functionality to create lists of lists:
+        
+                 findall([Ram,Disk,CPU,Os,Libs],app(X,_,Ram,Disk,CPU,Os,Libs),[AppData]),
+                 findall([MId,RamM,DiskM,CPUM,OsM],machine(MId,_,OsM,RamM,DiskM,CPUM),MachineData),
+                 
+        -- Creates AppData Lists with required Info,MachineData is list of list
+
+-----------------------------------------------------------------------------
+
+4. Use Of Recursion in Prolog :
+
+        member(X,[X|_]).
+
+        member(X,[_|T]) :-
+                member(X,T).
+                
+        subset([],_).
+
+        subset([X|Tail],Y):-
+                member(X,Y), subset(Tail,Y).
+                
+        -- For Check of Entities:
+        
+        check([MId,RamM,DiskM,CPUM,OsM],[Ram,Disk,CPU,Os,Libs]):-
+        member(OsM,Os),RamM >= Ram,DiskM >= Disk,CPUM >= CPU,findall(LibsM,os(OsM,_,_,_,_,_,LibsM),[LibsM]),subset(Libs,LibsM),write(MId),nl.        
+        
+        checkForAll([H|T],AppData):-
+                check(H,AppData); checkForAll(T,AppData).
+                
+---------------------------------------------------------------------------------------------------

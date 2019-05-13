@@ -1,0 +1,66 @@
+This is the Extracted Information about Constant Pool Size : 
+
+Apporximate Average Size of Constant Pool : 295
+Max Size of Constant Pool : 1214
+Min Size of Constant Pool : 13
+Approximate Standarad deviation of Constant Pool : 430
+-------------------------------------------------------------
+
+Approximate Average number of methods in class : 28
+
+-------------------------------------------------------------
+
+This are the top 50 JVM instructions with their frequency : 
+
+aload_0 => 282
+invokevirtual => 184
+getfield => 174
+aload_1 => 112
+invokespecial => 86
+areturn => 69
+return => 69
+ldc => 61
+aload_2 => 57
+dup => 56
+new => 54
+putfield => 45
+aload => 44
+checkcast => 41
+aload_3 => 39
+invokeinterface => 36
+iconst_0 => 32
+ifnonnull => 32
+iload => 29
+goto => 29
+aaload => 27
+astore => 27
+iconst_1 => 27
+ifeq => 26
+ireturn => 25
+iload_3 => 24
+aconst_null => 22
+athrow => 19
+iload_2 => 19
+pop => 17
+bipush => 17
+ifne => 15
+astore_3 => 13
+astore_2 => 12
+ifnull => 12
+istore => 11
+getstatic => 11
+ldc_w => 9
+aastore => 8
+iinc => 7
+if_icmplt => 7
+if_icmpne => 6
+iadd => 6
+iconst_5 => 6
+iload_1 => 6
+istore_3 => 6
+astore_1 => 6
+iconst_4 => 6
+ifge => 4
+jsr => 4
+
+-------------------------------------------------------------

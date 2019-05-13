@@ -1,0 +1,103 @@
+-------------------------------------------------------------------------------------------
+ 
+ Author : Siddharth Nahar
+ Entry Number : 2016csb1043
+ Functionality : Code seeks to learn how to execute system commands and javap diassembler 
+                 to explore classes in jar file.
+ Date : 10/3/18
+ 
+--------------------------------------------------------------------------------------------
+
+ Design Details :
+ 
+* ProcessBuilder and Process class to use sytem commands :
+
+  -- ProcessBuilder class to run system commands
+  -- All Systems commands run are shown below
+  
+  
+  ProcessBuilder pb = new ProcessBuilder(commands);
+  Process process = pb.start();
+  
+  Commands used are :
+  
+  To Download : "wget -O Classes.jar URL_JAR_FILE"
+  To extract  : "unzip -o -d Extract Classes.jar"
+  To Extract Path of class file : "find Extract/ -path *.class"
+  JavaP commands:
+  
+  For Constant Pool and JVM inst map : "javap -verbose CLASS_PATH"
+  For count of methods : "javap -p CLASS_PATH"
+  
+---------------------------------------------------------------------------------------------
+
+* To check whether string is Function name
+
+ -- Used Regular Expression for function name as :
+ -- To check wether string has syntax for function
+                      
+ String fname = "\\s*[^( ]+\\s*[(][^)]*[)][^;]*;";
+ 
+ String returnType = "\\s*[^() ]+";
+
+ String modifier = "\\s*(static|abstract|final)?";
+	   
+ String AccessSpecifier = "\\s*(public|private|protected)?";
+            
+  if(Pattern.matches(AccessSpecifier+modifier+fname,s) == false && Pattern.matches(AccessSpecifier+modifier+returnType+fname,s) == true)
+     return true;
+  else
+     return false;
+     
+--------------------------------------------------------------------------------------------------
+
+* To extract JVM instruction and Constant pool
+
+  -- Watching Output extracted substring by getting index of special character
+
+  Pool = Pool.substring(index+2);
+  index = Pool.indexOf(" ");
+  if(index == -1)
+    Pool = Pool.substring(0);
+  else
+    Pool = Pool.substring(0,index);
+  if(PoolTable.containsKey(Pool)){
+     PoolSize++; //PoolTable.get(Pool);
+  }
+  else
+     System.out.println(Pool);
+     
+  Pattern.matches("\\s*[0-9]+\\s*:\\s*[a-z].*",fun);  (JVM instruction pattern)
+ 
+------------------------------------------------------------------------------------------------------
+
+* To Calculate MAx,min,avg,deviation of Constant pool
+
+  -- Formulas and algo for max pool size ,devialtion and min pool size
+
+    if(maxConstantPoolSize <= obj.sizeOfPool)
+      maxConstantPoolSize = obj.sizeOfPool;
+                
+    if(minConstantPoolSize >= obj.sizeOfPool)
+      minConstantPoolSize = obj.sizeOfPool;
+               
+              
+    avgPoolSize += obj.sizeOfPool;
+    squarePoolSize += obj.sizeOfPool*obj.sizeOfPool;
+    avgMethods += obj.CountMethods;
+                          
+    for(HashMap.Entry<String,Integer> entry : obj.JVMInstCount.entrySet()){
+               
+        String key = entry.getKey();
+        Integer value = entry.getValue();
+                     
+        if(JVMCombInstCount.containsKey(key))
+           JVMCombInstCount.put(key,JVMCombInstCount.get(key)+value);
+        else
+           JVMCombInstCount.put(key,value); 
+                     
+    }
+   
+  -- This Alogrithm used and Sorting is used using Tree Map
+  
+------------------------------------------------------------------------------------------------------

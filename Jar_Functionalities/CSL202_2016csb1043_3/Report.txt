@@ -1,0 +1,35 @@
+-------------------------------------------------------------------------------------------
+ 
+ Author : Siddharth Nahar
+ Entry Number : 2016csb1043
+ Functionality : Code seeks to learn how to execute system commands and javap diassembler 
+                 to explore classes in jar file.
+ Date : 10/3/18
+ 
+--------------------------------------------------------------------------------------------
+
+To Compile and Run Code : 
+
+Username:~path$ javac 2016csb1043.java
+Username:~path$ java Demo
+
+
+Input : Enter "URL for .jar file" when Prompted
+
+Output : Gives Info for allClasses and Answers Required are Recorded in Output.txt
+
+----------------------------------------------------------------------------------------------
+
+Working : 
+
+* Used Process Builder for Systems Command Execution.
+
+* 3 Class Declared they are Comparator Class,ClassesInformation to store Structred info about classes
+  and Demo class to claculated major entites.
+  
+* javap -verbose : Used to get Constant pool size and JVM Insturctions Map
+  javap -p : To get number of methods
+  
+* HashMap Used to frquencies of JVM instructions and To calculate Constant pool instructions
+
+

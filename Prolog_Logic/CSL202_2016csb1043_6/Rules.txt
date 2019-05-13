@@ -1,0 +1,47 @@
+member(X,[X|_]).
+
+member(X,[_|T]) :-
+        member(X,T).
+        
+subset([],_).
+
+subset([X|Tail],Y):-
+        member(X,Y), subset(Tail,Y).
+
+checkTrue([RamM,DiskM,CPUM,OsM],[Ram,Disk,CPU,Os,Libs]):-
+        member(OsM,Os),RamM >= Ram,DiskM >= Disk,CPUM >= CPU,findall(LibsM,os(OsM,_,_,_,_,_,LibsM),[LibsM]),subset(Libs,LibsM),write('Yes'),nl.
+
+check([MId,RamM,DiskM,CPUM,OsM],[Ram,Disk,CPU,Os,Libs]):-
+        member(OsM,Os),RamM >= Ram,DiskM >= Disk,CPUM >= CPU,findall(LibsM,os(OsM,_,_,_,_,_,LibsM),[LibsM]),subset(Libs,LibsM),write(MId),nl.        
+        
+checkForAll([H|T],AppData):-
+        check(H,AppData); checkForAll(T,AppData).
+               
+        
+giveResult(X):-
+        findall([Ram,Disk,CPU,Os,Libs],app(X,_,Ram,Disk,CPU,Os,Libs),[AppData]),
+        findall([MId,RamM,DiskM,CPUM,OsM],machine(MId,_,OsM,RamM,DiskM,CPUM),MachineData),
+        checkForAll(MachineData,AppData),nb_setval(check,-1).
+
+giveResult(X,Y):-
+        findall([Ram,Disk,CPU,Os,Libs],app(X,_,Ram,Disk,CPU,Os,Libs),[AppData]),
+        findall([RamM,DiskM,CPUM,OsM],machine(Y,_,OsM,RamM,DiskM,CPUM),[MachineData]),
+        checkTrue(MachineData,AppData); write('No'),nl.
+
+queryOne(T):-
+        write('Q '),write(T),write(' | Enter App ID : '),read(X),nb_setval(check,1),
+        findall(_,giveResult(X),_),nb_getval(check,Check),
+        Check == -1 -> write('');write('No Machine is Suitable'),nl.
+
+queryTwo(T):-  
+        write('Q '),write(T),write(' :- '),nl,
+        write('Enter App ID : '),read(Y),
+        write('Enter Machine ID : '),read(Z),
+        giveResult(Y,Z).      
+        
+:- initialization main.
+        
+main:-
+        nl,write('Enter 1 to See all Machines Available for given Application Id'),nl,
+        write('Enter 2 to check whether given Machine is Suitable for given Application'),nl,write('Enter Your Query No. :- '),read(N),
+        N == 1 -> queryOne(1),halt ; queryTwo(2), halt.

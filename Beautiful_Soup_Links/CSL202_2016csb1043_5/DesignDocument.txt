@@ -1,0 +1,47 @@
+-----------------------------------------------------------------------------------------
+
+Author : Siddharth Nahar
+Entry No : 2016csb1043
+Use : Basic Python code,Beautiful soup library use and
+      basic file handling.
+Date : 2/4/18
+
+----------------------------------------------------------------------------------------
+
+Design : 
+
+* Finding all links by line numbers by file_reading : 
+
+ for LineNum,Line in enumerate(File_Ptr,1):
+
+        Pattern = 'href\s*=\s*"[^"]*"'
+        match   = re.findall(Pattern,Line)
+        
+----------------------------------------------------------------------------------------
+
+* Sort the duplicate links for Output sets : 
+
+sorted_x = sorted(set_dict.items(), key=operator.itemgetter(1))
+        i=1
+        for key in sorted_x:
+                print(str(i)+". "+key[1]+" at Line "+str(key[0]))
+                
+----------------------------------------------------------------------------------------
+
+* Deleting the links according to users choice : 
+
+for i,line in enumerate(sorted_x,1):
+                        
+                        if(Input.find(str(i)) == -1):
+                                index = Map_LineIndices[line[0]]
+                                
+                                
+                                if((index-del_a) < len(Soup_Final('a'))):
+                                        Soup_Final('a')[index-del_a].decompose()
+                                        del_a = del_a + 1
+                               
+                                            
+
+                fileIn.write(Soup_Final.prettify())
+                
+-----------------------------------------------------------------------------------------

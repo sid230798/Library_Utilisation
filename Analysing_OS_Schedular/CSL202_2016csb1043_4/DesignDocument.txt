@@ -1,0 +1,105 @@
+-----------------------------------------------------------------
+
+Author : Siddharth Nahar
+Entry No. : 2016csb1043
+Use : Extract info from top command
+      and Scheduling tasks and mailing System
+Date : 22/3/18
+
+-------------------------------------------------------------------------
+
+*Design and Documentation :
+
+
+ *For Reading Properties from Setting files as : 
+ 
+ Properties Props = new Properties();
+ FileInputStream in = new FileInputStream("settings.properties");
+ Props.load(in);
+          
+ TimeOut  = Double.parseDouble(Props.getProperty("quota.window.minutes")); 
+ 
+ -- Java Provides Properties class which divides Input file to fields key and value Pair
+ -- Extract Value by Specifying key
+ 
+
+------------------------------------------------------------------------------- 
+
+ *Using Schedular to Repaeat top command every 2 sec for specified time provided in file
+ 
+ final ScheduledFuture<?> beeperHandle = scheduler.scheduleAtFixedRate(beeper, 0, 2, SECONDS);
+ Runnable beeperStop = new Runnable() {
+          public void run() { 
+                      beeperHandle.cancel(true);
+                      scheduler.shutdown(); 
+          }
+ };
+       
+ scheduler.schedule(beeperStop, (long)(TimeOut*60), SECONDS);
+ 
+ -- TimeOut is time for which Setting file is valid
+ -- We use Runnable class to run any function for Scheduler
+ -- Shutdown is to quit thread immediately(necessary or Thread will not be terminated)
+ 
+----------------------------------------------------------------------------------------
+
+ *Running top command in batch mode 
+ 
+ ProcessBuilder Top = new ProcessBuilder(commands);
+ Process process    = Top.start();
+                                        
+ /*Read Output of command from InputStream of process*/
+  BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+ 
+ -- Command = "top -b n1 -o -Command" Sort output of Top command by Command name and run for only 1 batch
+ -- BuufereReader to read Output of top command
+ 
+--------------------------------------------------------------------------------------------
+
+ *DataStructure used To store Info for Violation
+ 
+ -- Used HashMap as ProcessId was uniqe and Class saving Details of Violated Process
+ 
+ ViolateTime = new HashMap<String,Integer>();
+ 
+ class Violaters{
+
+        
+        /*To store Info about each Process which violates the fields
+          Proc_Id = PrcessID,CPU,Mem %Usage,Time for which it has been 
+          running and Command and User name*/
+        String Proc_ID;
+        double _CPU_Usage,_MEM_Usage;
+       String Time;
+        String User,Command;
+        
+  }
+  
+  -- Used ProcessId as String so map stores ProcId and Time in violation
+  -- Class stores all relevent Info for Violated Process
+  -- Updates Map each time we get Command in Violating Period
+----------------------------------------------------------------------------------------------
+
+ *Sending Emails through javax API
+ 
+ -- Used mail,smtp and activation API for sending mails
+ 
+ Username = "xxxx@gmail.com
+ Password = "xxxxxx"              
+ Properties props = new Properties();
+ props.put("mail.smtp.auth", "true");
+ props.put("mail.smtp.starttls.enable", "true");
+ props.put("mail.smtp.host", "smtp.gmail.com");
+ props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+		
+ props.put("mail.smtp.port", "587");
+ 
+ Message message = new MimeMessage(session);
+ message.setFrom(new InternetAddress("Siddharth"));
+ message.setSubject("Testing Subject");
+ message.setText("You Have Violated This Process : \n"+EmailData);
+ Transport.send(message);
+
+ -- EmailData is Text to send in Emails       
+ 
+---------------------------------------------------------------------------------------------

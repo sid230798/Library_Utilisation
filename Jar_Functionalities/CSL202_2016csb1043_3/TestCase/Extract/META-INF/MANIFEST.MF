@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Created-By: Apache Ant 1.5
+
+Name: com/icl/saxon/aelfred/
+Specification-Title: AElfred XML Parser
+Specification-Version: 1.2
+Specification-Vendor: Microstar Software Ltd.
+Implementation-Title: com.icl.saxon.aelfred
+Implementation-Version: 1.2
+Implementation-Vendor: Michael H. Kay
+Implementation-URL: http://saxon.sourceforge.net
+
